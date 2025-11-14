@@ -1,0 +1,60 @@
+.contact-task-form {
+  max-width: 100%;
+  margin: 0;
+}
+.contact-task-form input,
+.contact-task-form textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #DADADA !important;
+  border-radius: 5px;
+min-height: 50px;
+}
+.contact-task-form .two-col {
+  display: flex;
+  gap: 10px;
+}
+.contact-task-form button {
+  background: #f97316;
+  color: #fff;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+margin-top: 15px;
+  border: 1px solid #f97316;
+}
+.contact-task-form button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.contact-task-form button.is-loading {
+  position: relative;
+}
+.contact-task-form button.is-loading::after {
+  content: '';
+  position: absolute;
+  right: -28px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ctf-spin 0.8s linear infinite;
+}
+@keyframes ctf-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.success-msg {
+  color: green;
+  text-align: center;
+}
+.error-msg {
+  color: red;
+  text-align: center;
+}

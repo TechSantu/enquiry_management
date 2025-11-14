@@ -1,0 +1,32 @@
+/* Admin styles for Contact Task Form Pro */
+.ctf-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.8;
+  color: #fff;
+}
+
+/* Default status colors (fallback if inline styles not applied) */
+.ctf-status-new { background-color: #6366f1; }
+.ctf-status-in-progress { background-color: #f59e0b; }
+.ctf-status-resolved { background-color: #10b981; }
+.ctf-status-closed { background-color: #6b7280; }
+
+.ctf-status-legend { margin-top: 8px; font-size: 12px; color: #555; }
+.ctf-status-legend span { margin-right: 8px; }
+
+/* List table filters */
+.ctf-filter-inline {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 8px;
+}
+.ctf-filter-inline select,
+.ctf-filter-inline input[type="text"] {
+  min-width: 150px;
+}
+
