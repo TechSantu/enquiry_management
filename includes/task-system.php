@@ -236,7 +236,7 @@ function ctf_status_box_html($post) {
             <?php endforeach; ?>
         </select>
     </div>
-    <div class="ctf-status-legend" style="margin-bottom: 10px;">
+    <div class="ctf-status-legend" style="margin-bottom: 10px; word-break: break-word;">
         <?php foreach ($all_statuses as $status_option) : 
             $slug = ctf_get_status_slug($status_option['name']);
         ?>
@@ -284,7 +284,7 @@ function ctf_status_box_html($post) {
                     $usage_count = ctf_get_status_usage_count($status_option['name']);
                 ?>
                     <div class="ctf-status-item" data-status-name="<?php echo esc_attr($status_option['name']); ?>" 
-                         style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #fff; margin-bottom: 6px; border: 1px solid #ddd; border-radius: 3px;">
+                         style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px; background: #fff; margin-bottom: 6px; border: 1px solid #ddd; border-radius: 3px;">
                         <input type="text" class="ctf-edit-status-name" value="<?php echo esc_attr($status_option['name']); ?>" 
                                data-original="<?php echo esc_attr($status_option['name']); ?>" 
                                style="flex: 1; min-width: 120px;" />
