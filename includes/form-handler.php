@@ -9,15 +9,15 @@ add_shortcode('contact_task_form', function() {
     ob_start(); ?>
     <form id="ctfForm" class="contact-task-form">
         <?php wp_nonce_field('ctf_form_nonce', 'security'); ?>
-        <input type="text" name="name" placeholder="Name of the Person" required>
-        <input type="text" name="company_name" placeholder="Name of the Company">
-        <input type="text" name="person_designation" placeholder="Person Designation">
+        <input type="text" name="name" placeholder="Name *" required>
+        <input type="text" name="company_name" placeholder="Company Name">
+        <input type="text" name="person_designation" placeholder="Designation">
         <div class="two-col">
-            <input type="text" name="phone" placeholder="Phone Number" required>
-            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="text" name="phone" placeholder="Phone Number *" required>
+            <input type="email" name="email" placeholder="Email Address *" required>
         </div>
         <input type="text" name="nature_of_trustee" placeholder="Nature of Trustee">
-        <textarea name="message" placeholder="Enquiry"></textarea>
+        <textarea name="message" placeholder="Enquiry *" required></textarea>
         
         <?php if ($honeypot_enabled) : ?>
             <!-- Honeypot field - should remain empty -->

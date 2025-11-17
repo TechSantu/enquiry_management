@@ -66,13 +66,13 @@ Enquiry Management is a powerful WordPress plugin that transforms your contact f
 ### Form Fields
 
 The contact form includes the following fields:
-- **Name** (required)
+- **Name** (required) *
 - **Company Name** (optional)
-- **Person Designation** (optional)
-- **Phone Number** (required)
-- **Email Address** (required)
+- **Designation** (optional)
+- **Phone Number** (required) *
+- **Email Address** (required) *
 - **Nature of Trustee** (optional)
-- **Enquiry/Message** (optional)
+- **Enquiry/Message** (required) *
 
 ### Custom Statuses
 
@@ -107,7 +107,8 @@ The contact form includes the following fields:
 2. **Step 1**: Upload CSV file (max size based on PHP settings)
 3. **Step 2**: Map CSV columns to fields
    - Map to existing fields or create new ones
-   - Required fields: Name, Email
+   - Required fields: Name, Email, Phone, Message
+   - Optional fields: Company Name, Designation, Nature of Trustee
 4. **Step 3**: Preview mapped data
 5. Click "Import All Rows" to complete import
 
@@ -132,11 +133,13 @@ Task Managers have limited access:
 
 ### Protected Fields (Used in Contact Form)
 These fields are automatically created and cannot be deleted:
-- Company Name
-- Person Designation
-- Contact Email
-- Phone Number
-- Nature of Trustee
+- Name (required)
+- Company Name (optional)
+- Designation (optional)
+- Contact Email (required)
+- Phone Number (required)
+- Nature of Trustee (optional)
+- Message/Enquiry (required)
 
 ### Custom Fields
 Additional fields can be added through:
@@ -181,8 +184,8 @@ Sent to the submitter confirming receipt, includes:
 
 ### CSV Format Requirements
 - First row must contain column headers
-- Required columns: **Name**, **Email**
-- Optional columns: Phone, Company Name, Person Designation, Nature of Trustee, Message
+- Required columns: **Name**, **Email**, **Phone**, **Message**
+- Optional columns: **Company Name**, Designation, Nature of Trustee
 - Additional columns can be mapped to custom fields
 
 ### Import Process
@@ -196,11 +199,13 @@ Sent to the submitter confirming receipt, includes:
 
 ### Import Features
 - Auto-detects CSV delimiter
-- Validates required fields (Name, Email)
-- Skips invalid rows and reports count
+- Validates required fields (Name, Email, Phone, Message)
+- Validates field lengths and formats (phone: 7-15 digits, email format, etc.)
+- Skips invalid rows and reports specific errors
 - Creates new custom fields on-the-fly
 - Sets default status for imported enquiries
 - Creates audit log entries for imports
+- Detailed error reporting for troubleshooting
 
 ## Status Management
 
@@ -310,9 +315,12 @@ contact-task-form/
 
 ### Import Not Working
 - Check CSV file format (headers in first row)
-- Verify required columns (Name, Email) are mapped
+- Verify required columns (Name, Email, Phone, Message) are mapped
 - Check PHP upload limits in settings
 - Review error messages in import preview
+- Ensure phone numbers have 7-15 digits
+- Verify email addresses are valid format
+- Check field length requirements (Name: 2-100, Company Name: 2-200 if provided, Message: max 2000)
 
 ### CAPTCHA Issues
 - Verify site key and secret key are correct

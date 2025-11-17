@@ -69,7 +69,7 @@ function ctf_get_task_fields() {
     if (empty($fields)) {
         $default_fields = [
             ['label' => 'Company Name', 'field_type' => 'text', 'meta_key' => 'company_name', 'order' => 1],
-            ['label' => 'Person Designation', 'field_type' => 'text', 'meta_key' => 'person_designation', 'order' => 2],
+            ['label' => 'Designation', 'field_type' => 'text', 'meta_key' => 'person_designation', 'order' => 2],
             ['label' => 'Contact Email', 'field_type' => 'email', 'meta_key' => 'email', 'order' => 3],
             ['label' => 'Phone Number', 'field_type' => 'text', 'meta_key' => 'phone', 'order' => 4],
             ['label' => 'Nature of Trustee', 'field_type' => 'text', 'meta_key' => 'nature_of_trustee', 'order' => 5],
@@ -123,7 +123,7 @@ function ctf_add_task_field($label, $field_type = 'text', $meta_key = '', $order
     if (empty($fields)) {
         $fields = [
             ['label' => 'Company Name', 'field_type' => 'text', 'meta_key' => 'company_name', 'order' => 1],
-            ['label' => 'Person Designation', 'field_type' => 'text', 'meta_key' => 'person_designation', 'order' => 2],
+            ['label' => 'Designation', 'field_type' => 'text', 'meta_key' => 'person_designation', 'order' => 2],
             ['label' => 'Contact Email', 'field_type' => 'email', 'meta_key' => 'email', 'order' => 3],
             ['label' => 'Phone Number', 'field_type' => 'text', 'meta_key' => 'phone', 'order' => 4],
             ['label' => 'Nature of Trustee', 'field_type' => 'text', 'meta_key' => 'nature_of_trustee', 'order' => 5],

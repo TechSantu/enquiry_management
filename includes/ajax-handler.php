@@ -105,9 +105,18 @@ function ctf_handle_ajax() {
     $nature_of_trustee = sanitize_text_field($raw_nature_of_trustee);
     $message = sanitize_textarea_field($raw_message);
 
-    // Basic validation
-    if ($name === '' || $email === '') {
-        wp_send_json_error(['message' => 'Please fill in your name and email.']);
+    // Basic validation - required fields
+    if ($name === '') {
+        wp_send_json_error(['message' => 'Please fill in your name.']);
+    }
+    if ($email === '') {
+        wp_send_json_error(['message' => 'Please fill in your email address.']);
+    }
+    if ($phone === '') {
+        wp_send_json_error(['message' => 'Please fill in your phone number.']);
+    }
+    if ($message === '') {
+        wp_send_json_error(['message' => 'Please fill in your enquiry.']);
     }
     if (!is_email($email)) {
         wp_send_json_error(['message' => 'Please enter a valid email address.']);
@@ -120,18 +129,18 @@ function ctf_handle_ajax() {
         wp_send_json_error(['message' => 'Company name must be between 2 and 200 characters.']);
     }
     if ($person_designation !== '' && (mb_strlen($person_designation) < 2 || mb_strlen($person_designation) > 100)) {
-        wp_send_json_error(['message' => 'Person designation must be between 2 and 100 characters.']);
+        wp_send_json_error(['message' => 'Designation must be between 2 and 100 characters.']);
     }
     if ($nature_of_trustee !== '' && (mb_strlen($nature_of_trustee) < 2 || mb_strlen($nature_of_trustee) > 100)) {
         wp_send_json_error(['message' => 'Nature of trustee must be between 2 and 100 characters.']);
     }
-    if ($message !== '' && mb_strlen($message) > 2000) {
+    if (mb_strlen($message) > 2000) {
         wp_send_json_error(['message' => 'Message must be 2000 characters or fewer.']);
     }
-    // Phone: allow digits, spaces, +, -, () and require 7-15 digits if provided
+    // Phone: allow digits, spaces, +, -, () and require 7-15 digits (required field)
     $digits_only = preg_replace('/\D+/', '', $phone);
-    if ($phone !== '' && (strlen($digits_only) < 7 || strlen($digits_only) > 15)) {
-        wp_send_json_error(['message' => 'Please enter a valid phone number or leave it empty.']);
+    if (strlen($digits_only) < 7 || strlen($digits_only) > 15) {
+        wp_send_json_error(['message' => 'Please enter a valid phone number (7-15 digits).']);
     }
 
     // Simple IP-based rate limit: 1 submission per 30 seconds

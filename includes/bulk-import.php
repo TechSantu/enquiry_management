@@ -377,8 +377,8 @@ function ctf_import_upload_step() {
                 <h3 style="margin-top: 0;">CSV Format Requirements:</h3>
                 <ul>
                     <li>First row must contain column headers</li>
-                    <li>Required columns: <strong>Name</strong>, <strong>Email</strong></li>
-                    <li>Optional columns: <strong>Phone</strong>, <strong>Company Name</strong>, <strong>Person Designation</strong>, <strong>Nature of Trustee</strong>, <strong>Message</strong></li>
+                    <li>Required columns: <strong>Name</strong>, <strong>Email</strong>, <strong>Phone</strong>, <strong>Message</strong></li>
+                    <li>Optional columns: <strong>Company Name</strong>, <strong>Designation</strong>, <strong>Nature of Trustee</strong></li>
                     <li>You can include additional columns that will be mapped to custom fields</li>
                 </ul>
             </div>
@@ -474,7 +474,8 @@ function ctf_import_map_step() {
                                         <optgroup label="Standard Fields">
                                             <option value="phone" <?php selected(strtolower($header), 'phone'); ?>>Phone</option>
                                             <option value="company_name" <?php selected(strtolower($header), 'company name'); ?>>Company Name</option>
-                                            <option value="person_designation" <?php selected(strtolower($header), 'person designation'); ?>>Person Designation</option>
+                                            <option value="person_designation" <?php selected(strtolower($header), 'person designation'); ?>>Designation</option>
+                                            <option value="person_designation" <?php selected(strtolower($header), 'designation'); ?>>Designation</option>
                                             <option value="nature_of_trustee" <?php selected(strtolower($header), 'nature of trustee'); ?>>Nature of Trustee</option>
                                             <option value="message" <?php selected(strtolower($header), 'message'); ?>>Message</option>
                                         </optgroup>
@@ -810,20 +811,83 @@ function ctf_process_import($file_path, $mappings) {
         }
         
         // Validate required fields
-        if (empty($data['name']) || empty($data['email'])) {
+        $missing_fields = [];
+        if (empty($data['name'])) $missing_fields[] = 'name';
+        if (empty($data['email'])) $missing_fields[] = 'email';
+        if (empty($data['phone'])) $missing_fields[] = 'phone';
+        if (empty($data['message'])) $missing_fields[] = 'message';
+        
+        if (!empty($missing_fields)) {
             $skipped++;
+            $result['errors'][] = "Row {$row_number}: Missing required fields: " . implode(', ', $missing_fields);
             if ($row_number <= 3) {
-                error_log("CTF Import Row {$row_number} skipped - Missing name or email. Data: " . print_r($data, true));
+                error_log("CTF Import Row {$row_number} skipped - Missing required fields: " . implode(', ', $missing_fields) . ". Data: " . print_r($data, true));
             }
             continue; // Skip invalid rows
         }
         
+        // Validate email format
         if (!is_email($data['email'])) {
             $skipped++;
+            $result['errors'][] = "Row {$row_number}: Invalid email address: " . $data['email'];
             if ($row_number <= 3) {
                 error_log("CTF Import Row {$row_number} skipped - Invalid email: " . $data['email']);
             }
             continue; // Skip invalid email
+        }
+        
+        // Validate field lengths (same as manual save)
+        if (mb_strlen($data['name']) < 2 || mb_strlen($data['name']) > 100) {
+            $skipped++;
+            $result['errors'][] = "Row {$row_number}: Name must be between 2 and 100 characters";
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Name must be between 2 and 100 characters: " . $data['name']);
+            }
+            continue;
+        }
+        // Validate company_name only if provided (optional field)
+        if (isset($data['company_name']) && $data['company_name'] !== '' && (mb_strlen($data['company_name']) < 2 || mb_strlen($data['company_name']) > 200)) {
+            $skipped++;
+            $result['errors'][] = "Row {$row_number}: Company name must be between 2 and 200 characters";
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Company name must be between 2 and 200 characters: " . $data['company_name']);
+            }
+            continue;
+        }
+        if (mb_strlen($data['message']) > 2000) {
+            $skipped++;
+            $result['errors'][] = "Row {$row_number}: Message must be 2000 characters or fewer";
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Message must be 2000 characters or fewer");
+            }
+            continue;
+        }
+        
+        // Validate phone number format (7-15 digits) - same as manual save
+        $phone_digits_only = preg_replace('/\D+/', '', $data['phone']);
+        if (strlen($phone_digits_only) < 7 || strlen($phone_digits_only) > 15) {
+            $skipped++;
+            $result['errors'][] = "Row {$row_number}: Invalid phone number (must have 7-15 digits): " . $data['phone'];
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Invalid phone number (must have 7-15 digits): " . $data['phone']);
+            }
+            continue;
+        }
+        
+        // Validate optional fields if provided
+        if (isset($data['person_designation']) && $data['person_designation'] !== '' && (mb_strlen($data['person_designation']) < 2 || mb_strlen($data['person_designation']) > 100)) {
+            $skipped++;
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Designation must be between 2 and 100 characters: " . $data['person_designation']);
+            }
+            continue;
+        }
+        if (isset($data['nature_of_trustee']) && $data['nature_of_trustee'] !== '' && (mb_strlen($data['nature_of_trustee']) < 2 || mb_strlen($data['nature_of_trustee']) > 100)) {
+            $skipped++;
+            if ($row_number <= 3) {
+                error_log("CTF Import Row {$row_number} skipped - Nature of trustee must be between 2 and 100 characters: " . $data['nature_of_trustee']);
+            }
+            continue;
         }
         
         // Create post
@@ -907,8 +971,18 @@ function ctf_process_import($file_path, $mappings) {
                 }
             }
             
-            // Set default status
+            // Set default status (ensure it's set)
+            $default_statuses = ctf_get_status_names();
+            $default_status = !empty($default_statuses) ? $default_statuses[0] : 'New';
             update_post_meta($post_id, 'status', $default_status);
+            
+            // Ensure all required meta fields are saved (even if empty, to maintain consistency)
+            if (!isset($data['person_designation'])) {
+                update_post_meta($post_id, 'person_designation', '');
+            }
+            if (!isset($data['nature_of_trustee'])) {
+                update_post_meta($post_id, 'nature_of_trustee', '');
+            }
             
             // Initialize audit log
             $log = [[

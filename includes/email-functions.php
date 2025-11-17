@@ -70,7 +70,7 @@ function ctf_send_admin_email($post_id, $name, $email, $message) {
     $rows = [
         ['label' => 'Name', 'value' => esc_html($name)],
         ['label' => 'Company Name', 'value' => esc_html($company_name ?: 'N/A')],
-        ['label' => 'Person Designation', 'value' => esc_html($person_designation ?: 'N/A')],
+        ['label' => 'Designation', 'value' => esc_html($person_designation ?: 'N/A')],
         ['label' => 'Email', 'value' => '<a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a>'],
         ['label' => 'Phone', 'value' => esc_html($phone ?: 'N/A')],
         ['label' => 'Nature of Trustee', 'value' => esc_html($nature_of_trustee ?: 'N/A')],

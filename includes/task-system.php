@@ -355,7 +355,7 @@ function ctf_change_log_box_html($post) {
     echo '<p><strong>User Agent:</strong> ' . esc_html($ua) . '</p>';
     echo '<p><strong>Phone:</strong> ' . esc_html($phone) . '</p>';
     echo '<p><strong>Company Name:</strong> ' . esc_html($company_name) . '</p>';
-    echo '<p><strong>Person Designation:</strong> ' . esc_html($person_designation) . '</p>';
+    echo '<p><strong>Designation:</strong> ' . esc_html($person_designation) . '</p>';
     echo '<p><strong>Nature of Trustee:</strong> ' . esc_html($nature_of_trustee) . '</p>';
     if ($ref) {
         echo '<p><strong>Referrer:</strong> <a href="' . esc_url($ref) . '" target="_blank" rel="noopener noreferrer">' . esc_html($ref) . '</a></p>';
@@ -587,7 +587,7 @@ add_action('save_post', function($post_id){
                 'time' => current_time('mysql'),
                 'user_id' => get_current_user_id(),
                 'action' => 'person_designation_changed',
-                'details' => sprintf('Person designation changed from %s to %s', $old_person_designation ?: 'N/A', $new_person_designation ?: 'N/A'),
+                'details' => sprintf('Designation changed from %s to %s', $old_person_designation ?: 'N/A', $new_person_designation ?: 'N/A'),
             ];
             update_post_meta($post_id, 'ctf_change_log', $log);
         }

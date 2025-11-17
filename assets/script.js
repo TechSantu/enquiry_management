@@ -20,7 +20,7 @@ jQuery(document).ready(function($){
         var $btn = form.find('button[type="submit"]');
         var $resp = form.find('.ctf-response');
 
-        // Basic client-side validation
+        // Basic client-side validation - check all fields for blank values
         var name = $.trim(form.find('input[name="name"]').val());
         var companyName = $.trim(form.find('input[name="company_name"]').val());
         var personDesignation = $.trim(form.find('input[name="person_designation"]').val());
@@ -28,20 +28,36 @@ jQuery(document).ready(function($){
         var phone = $.trim(form.find('input[name="phone"]').val());
         var natureOfTrustee = $.trim(form.find('input[name="nature_of_trustee"]').val());
         var message = $.trim(form.find('textarea[name="message"]').val());
-        if(!name || !email){
-            $resp.html('<p class="error-msg">Please fill in your name and email.</p>');
+        
+        // Validate required fields
+        if(!name){
+            $resp.html('<p class="error-msg">Please fill in your name.</p>');
             return;
         }
+        if(!email){
+            $resp.html('<p class="error-msg">Please fill in your email address.</p>');
+            return;
+        }
+        if(!phone){
+            $resp.html('<p class="error-msg">Please fill in your phone number.</p>');
+            return;
+        }
+        if(!message){
+            $resp.html('<p class="error-msg">Please fill in your enquiry.</p>');
+            return;
+        }
+        
         if(!inRangeLen(name, 2, 100)){
             $resp.html('<p class="error-msg">Name must be between 2 and 100 characters.</p>');
             return;
         }
+        // Validate optional fields if provided
         if(companyName && !inRangeLen(companyName, 2, 200)){
             $resp.html('<p class="error-msg">Company name must be between 2 and 200 characters.</p>');
             return;
         }
         if(personDesignation && !inRangeLen(personDesignation, 2, 100)){
-            $resp.html('<p class="error-msg">Person designation must be between 2 and 100 characters.</p>');
+            $resp.html('<p class="error-msg">Designation must be between 2 and 100 characters.</p>');
             return;
         }
         if(natureOfTrustee && !inRangeLen(natureOfTrustee, 2, 100)){
@@ -57,7 +73,7 @@ jQuery(document).ready(function($){
             return;
         }
         if(!validPhone(phone)){
-            $resp.html('<p class="error-msg">Please enter a valid phone number or leave it empty.</p>');
+            $resp.html('<p class="error-msg">Please enter a valid phone number (7-15 digits).</p>');
             return;
         }
         

@@ -22,7 +22,7 @@ add_action('manage_contact_enquiry_posts_custom_column', function($col, $post_id
         $status = $status ?: $default_status;
         $slug = ctf_get_status_slug($status);
         $color = ctf_get_status_color($status);
-        echo '<span class="ctf-badge ctf-status-' . esc_attr($slug) . '" style="background-color: ' . esc_attr($color) . ';">' . esc_html($status) . '</span>';
+        echo '<span class="ctf-badge ctf-status-' . esc_attr($slug) . '" style="background-color: ' . esc_attr($color) . '; word-break: break-word;">' . esc_html($status) . '</span>';
     }
 }, 10, 2);
 
